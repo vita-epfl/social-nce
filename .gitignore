@@ -1,0 +1,23 @@
+# data
+*videos/
+*data/
+*result/
+*script/
+
+*.txt
+*.run
+*.pt
+*.mp4
+
+# Python
+*venv*/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# Editors
+.vscode/
+
+# OS
+.DS_Store
+
