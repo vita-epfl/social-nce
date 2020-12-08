@@ -1,21 +1,14 @@
-import sys
 import logging
 import argparse
 import configparser
 import os
-import shutil
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import time
-import gym
-import git
 
-from crowd_nav.utils.pretrain import freeze_model, count_parameters, trim_model_dict
-from crowd_nav.utils.trainer import SocialTrainer
+from crowd_nav.utils.pretrain import freeze_model, trim_model_dict
 from crowd_nav.utils.dataset import ImitDataset, split_dataset
 from crowd_nav.policy.policy_factory import policy_factory
-from crowd_nav.utils.visualize import plot_tsne
 from crowd_nav.utils.configure import config_log, config_path
 from crowd_nav.snce.contrastive import SocialNCE
 from crowd_nav.snce.model import ProjHead, SpatialEncoder, EventEncoder
@@ -55,9 +48,9 @@ def build_policy(args):
     """
     policy = policy_factory[args.policy]()
     if not policy.trainable:
-        parser.error('Policy has to be trainable')
+        raise Exception('Policy has to be trainable')
     if args.policy_config is None:
-        parser.error('Policy config has to be specified for a trainable network')
+        raise Exception('Policy config has to be specified for a trainable network')
     policy_config = configparser.RawConfigParser()
     policy_config.read(args.policy_config)
     policy.configure(policy_config)
@@ -87,7 +80,7 @@ def set_model(args, device):
 
     return policy_net
 
-def load_model(policy_net, args):
+def load_model(policy_net, args, device):
     """
     Load pretrained model
     """
@@ -113,11 +106,11 @@ def train(policy_net, projection_head, encoder_sample, train_loader, criterion, 
     loss_sum_all, loss_sum_task, loss_sum_nce = 0, 0, 0
 
     for robot_states, human_states, action_targets, pos_seeds, neg_seeds in train_loader:
-        
+
         # main task
         outputs, features = policy_net(robot_states, human_states)
         loss_task = criterion(outputs, action_targets)
-        
+
         # contrastive task
         if args.contrast_weight > 0:
             loss_nce = nce.loss(robot_states, human_states, pos_seeds, neg_seeds, features)
@@ -168,8 +161,10 @@ def main():
     # config
     if args.contrast_weight > 0:
         suffix = "-{}-data-{:.1f}-weight-{:.1f}-horizon-{:d}-temperature-{:.2f}-nboundary-{:d}".format(args.contrast_sampling, args.percent_label, args.contrast_weight, args.contrast_horizon, args.contrast_temperature, args.contrast_nboundary)
-        if args.contrast_nboundary > 0: suffix += "-ratio-{:.2f}".format(args.ratio_boundary)
-        if args.contrast_sampling == 'local': suffix += "-range-{:.2f}".format(args.contrast_range)
+        if args.contrast_nboundary > 0:
+            suffix += "-ratio-{:.2f}".format(args.ratio_boundary)
+        if args.contrast_sampling == 'local':
+            suffix += "-range-{:.2f}".format(args.contrast_range)
     else:
         suffix = "-baseline-data-{:.1f}".format(args.percent_label)
     config_path(args, suffix)
@@ -188,10 +183,10 @@ def main():
         encoder_sample = EventEncoder(hidden_dim=8, head_dim=8).to(device)
     else:
         encoder_sample = SpatialEncoder(hidden_dim=8, head_dim=8).to(device)
-    
+
     # pretrain
     if os.path.exists(args.model_file):
-        load_model(policy_net, args)
+        load_model(policy_net, args, device)
 
     # optimize
     param = list(policy_net.parameters()) + list(projection_head.parameters()) + list(encoder_sample.parameters())
@@ -202,7 +197,7 @@ def main():
 
     # loop
     for epoch in range(args.num_epoch):
-        
+
         train_loss_all, train_loss_task, train_loss_nce = train(policy_net, projection_head, encoder_sample, train_loader, criterion, nce, optimizer, args)
         eval_loss_all, eval_loss_task, eval_loss_nce = validate(policy_net, projection_head, encoder_sample, valid_loader, criterion, nce, args)
 
@@ -211,7 +206,7 @@ def main():
         if epoch % args.save_every == (args.save_every - 1):
             logging.info("Epoch #%02d: loss = (%.4f, %.4f), task = (%.4f, %.4f), nce = (%.4f, %.4f)", epoch, train_loss_all, eval_loss_all, train_loss_task, eval_loss_task, train_loss_nce, eval_loss_nce)
             torch.save(policy_net.state_dict(), os.path.join(args.output_dir, 'policy_net_{:02d}.pth'.format(epoch)))
-    
+
     torch.save(policy_net.state_dict(), os.path.join(args.output_dir, 'policy_net.pth'))
 
 if __name__ == '__main__':

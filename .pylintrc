@@ -10,6 +10,5 @@ good-names=dx,dy,i,j,k,px,py,r,th,vx,vy,x,y,z,ob
 # expressions are accepted.
 generated-members=numpy.*,torch.*
 
-
 disable=missing-docstring,useless-object-inheritance
-max-line-length=120
+max-line-length=180
