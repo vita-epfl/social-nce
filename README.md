@@ -4,18 +4,15 @@
   <img src="docs/illustration.png" width="300">
 </p>
 
-This repository contains the code and data to replicate the experiments in our paper:
-
-<!-- **Social NCE: Contrastive Learning for Socially-aware Trajectory Forecasting and Motion Planning** <br>
-*Yuejiang Liu, Qi Yan, Alexandre Alahi* <br>
- -->
+<!-- This repository contains the code and data to replicate the experiments in our paper:
 ```bibtex
 @article{liu2020snce,
-    title={Social NCE: Contrastive Learning for Socially-aware Trajectory Forecasting and Motion Planning},
+    title={Social NCE: Contrastive Learning of Socially-aware Motion Representations},
     author={Yuejiang Liu and Qi Yan and Alexandre Alahi},
     year={2020}
 }
 ```
+ -->
 
 ### Preparation
 

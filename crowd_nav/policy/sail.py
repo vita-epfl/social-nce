@@ -112,8 +112,8 @@ class SAIL(MultiHumanPolicy):
 
     def configure(self, config):
         self.set_common_parameters(config)
-        self.multiagent_training = config.getboolean('sspn', 'multiagent_training')
-        self.model = ExtendedNetwork(config.getint('sspn', 'human_num'))
+        self.multiagent_training = config.getboolean('sail', 'multiagent_training')
+        self.model = ExtendedNetwork(config.getint('sail', 'human_num'))
 
     def predict(self, state):
         if self.phase is None or self.device is None:
