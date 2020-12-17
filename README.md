@@ -1,4 +1,4 @@
-## Social NCE: Contrastive Learning for Socially-aware Motion Representations
+## Social NCE: Contrastive Learning of Socially-aware Motion Representations
 
 <p align="center">
   <img src="docs/illustration.png" width="300">
