@@ -27,8 +27,11 @@
 
 ### Repo Structure
 ```
-├── README.md                 <- You are here
-│
+├── README.md
+|
+├── docs
+│   ├── SETUP.md              <- You are here
+|
 ├── crowd_nav
 │   ├── imitate.py            <- Train script
 │   ├── test.py               <- Test script
