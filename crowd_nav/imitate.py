@@ -29,7 +29,8 @@ def parse_arguments():
     parser.add_argument('--contrast_nboundary', type=int, default=0)
     parser.add_argument('--ratio_boundary', type=float, default=0.5)
     parser.add_argument('--percent_label', type=float, default=0.5)
-    parser.add_argument('--num_epoch', type=int, default=100)
+    parser.add_argument('--num_epoch', type=int, default=200)
+    parser.add_argument('--scheduler_patience', type=int, default=20)    
     parser.add_argument('--save_every', type=int, default=5)
     parser.add_argument('--length_pred', type=int, default=1)
     parser.add_argument('--skip_pred', type=int, default=1)
@@ -160,13 +161,13 @@ def main():
 
     # config
     if args.contrast_weight > 0:
-        suffix = "-{}-data-{:.1f}-weight-{:.1f}-horizon-{:d}-temperature-{:.2f}-nboundary-{:d}".format(args.contrast_sampling, args.percent_label, args.contrast_weight, args.contrast_horizon, args.contrast_temperature, args.contrast_nboundary)
+        suffix = "-{}-data-{:.2f}-weight-{:.1f}-horizon-{:d}-temperature-{:.2f}-nboundary-{:d}".format(args.contrast_sampling, args.percent_label, args.contrast_weight, args.contrast_horizon, args.contrast_temperature, args.contrast_nboundary)
         if args.contrast_nboundary > 0:
             suffix += "-ratio-{:.2f}".format(args.ratio_boundary)
         if args.contrast_sampling == 'local':
             suffix += "-range-{:.2f}".format(args.contrast_range)
     else:
-        suffix = "-baseline-data-{:.1f}".format(args.percent_label)
+        suffix = "-baseline-data-{:.2f}".format(args.percent_label)
     config_path(args, suffix)
     config_log(args)
 
@@ -191,7 +192,7 @@ def main():
     # optimize
     param = list(policy_net.parameters()) + list(projection_head.parameters()) + list(encoder_sample.parameters())
     optimizer = optim.Adam(param, lr=args.lr)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=0.5, patience=20, threshold=0.01, cooldown=20, min_lr=1e-5, verbose=True)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=args.scheduler_patience, threshold=0.01, factor=0.5, cooldown=args.scheduler_patience, min_lr=1e-5, verbose=True)
     criterion = nn.MSELoss()
     nce = SocialNCE(projection_head, encoder_sample, args.contrast_sampling, args.contrast_horizon, args.contrast_nboundary, args.contrast_temperature, args.contrast_range, args.ratio_boundary)
 
