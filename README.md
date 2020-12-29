@@ -19,8 +19,6 @@ This is a PyTorch implementation of the [Social-NCE paper](https://arxiv.org/abs
 > * Rank the **1st place** on the [Trajnet++ forecasting challenge](https://www.aicrowd.com/challenges/trajnet-a-trajectory-forecasting-challenge/leaderboards) at the time of publication
 > * SOTA on imitation / reinforcement learning for [autonomous navigation in crowds](https://github.com/vita-epfl/CrowdNav)
 
-<!-- > Learning socially-aware motion representations is at the core of recent advances in human trajectory forecasting and robot navigation in crowded spaces. Yet existing methods often struggle to generalize to challenging scenarios. In this work, we propose to address this issue via contrastive learning: (i) we introduce a social contrastive loss that encourages the encoded motion representation to preserve sufficient information for distinguishing a positive future event from a set of negative ones, (ii) we explicitly draw these negative samples based on our domain knowledge about socially unfavorable scenarios in the multi-agent context. Experimental results show that the proposed method consistently boosts the performance of previous trajectory forecasting, behavioral cloning, and reinforcement learning algorithms in various settings.  -->
-
 ### Preparation
 
 Setup environments follwoing the [SETUP.md](docs/SETUP.md)
@@ -34,22 +32,27 @@ Setup environments follwoing the [SETUP.md](docs/SETUP.md)
   ```
 * Social-NCE + Conventional Negative Sampling (Local)
   ```
-  python imitate.py --contrast_weight=0.5 --contrast_sampling='local' --gpu
-  python test.py --policy='sail' --circle --model_file=data/output/imitate-local-data-0.50-weight-0.5-horizon-4-temperature-0.20-nboundary-0-range-2.00/policy_net.pth
+  python imitate.py --contrast_weight=2.0 --contrast_sampling='local' --gpu
+  python test.py --policy='sail' --circle --model_file=data/output/imitate-local-data-0.50-weight-2.0-horizon-4-temperature-0.20-nboundary-0-range-2.00/policy_net.pth
   ```
 * Social-NCE + Safety-driven Negative Sampling (Ours)
   ```
-  python imitate.py --contrast_weight=0.5 --contrast_sampling='event' --gpu
-  python test.py --policy='sail' --circle --model_file=data/output/imitate-event-data-0.50-weight-0.5-horizon-4-temperature-0.20-nboundary-0/policy_net.pth
+  python imitate.py --contrast_weight=2.0 --contrast_sampling='event' --gpu
+  python test.py --policy='sail' --circle --model_file=data/output/imitate-event-data-0.50-weight-2.0-horizon-4-temperature-0.20-nboundary-0/policy_net.pth
+  ```
+* Method Comparison
+  ```
+  bash script/run_vanilla.sh && bash script/run_local.sh && bash script/run_snce.sh
+  python utils/compare.py
   ```
 
-### Sample Results
+### Basic Results
 
 Results of behavioral cloning with different methods.
 
-<img src="docs/collision.png" width="300"/> <img src="docs/reward.png" width="300"/> 
+<img src="docs/collision.png" height="240"/> <img src="docs/reward.png" height="240"/> 
 
-Averaged results from 150 to 200 epochs.
+Averaged results from the 150th to 200th epochs.
 
 <table><tbody>
 <!-- START TABLE -->

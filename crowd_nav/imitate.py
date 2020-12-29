@@ -167,7 +167,7 @@ def main():
         if args.contrast_sampling == 'local':
             suffix += "-range-{:.2f}".format(args.contrast_range)
     else:
-        suffix = "-baseline-data-{:.2f}".format(args.percent_label)
+        suffix = "-vanilla-data-{:.2f}".format(args.percent_label)
     config_path(args, suffix)
     config_log(args)
 
