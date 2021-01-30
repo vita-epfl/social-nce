@@ -1,14 +1,8 @@
-import logging
-import copy
 import torch
 import torch.nn as nn
 
-from crowd_sim.envs.policy.policy import Policy
 from crowd_sim.envs.utils.action import ActionRot, ActionXY
-from crowd_sim.envs.utils.state import ObservableState, FullState
-from crowd_nav.policy.cadrl import CADRL, mlp
 from crowd_nav.policy.multi_human_rl import MultiHumanPolicy
-
 from crowd_nav.utils.transform import MultiAgentTransform
 
 class ExtendedNetwork(nn.Module):
@@ -43,13 +37,13 @@ class ExtendedNetwork(nn.Module):
 
         self.pairwise = nn.Sequential(
             nn.Linear(embedding_dim, hidden_dim),
-            nn.ReLU(inplace=True), 
+            nn.ReLU(inplace=True),
             nn.Linear(hidden_dim, hidden_dim)
         )
 
         self.attention = nn.Sequential(
             nn.Linear(embedding_dim, hidden_dim),
-            nn.ReLU(inplace=True), 
+            nn.ReLU(inplace=True),
             nn.Linear(hidden_dim, 1)
         )
 
@@ -68,19 +62,19 @@ class ExtendedNetwork(nn.Module):
         self.planner = nn.Linear(hidden_dim, 2)
 
     def forward(self, robot_state, crowd_obsv):
-        
-        if len(robot_state.shape) < 2: 
+
+        if len(robot_state.shape) < 2:
             robot_state = robot_state.unsqueeze(0)
             crowd_obsv = crowd_obsv.unsqueeze(0)
 
         # preprocessing
-        emb_robot = self.robot_encoder(robot_state[:,:4])
-        
+        emb_robot = self.robot_encoder(robot_state[:, :4])
+
         human_state = self.transform.transform_frame(crowd_obsv)
         feat_human = self.human_encoder(human_state)
         emb_human = self.human_head(feat_human)
 
-        emb_concat = torch.cat([emb_robot.unsqueeze(1).repeat(1,self.num_human,1), emb_human], axis=2)
+        emb_concat = torch.cat([emb_robot.unsqueeze(1).repeat(1, self.num_human, 1), emb_human], axis=2)
 
         # embedding
         emb_pairwise = self.joint_embedding(emb_concat)
@@ -96,7 +90,7 @@ class ExtendedNetwork(nn.Module):
         feat_crowd = torch.sum(feat_pairwise * score_pairwise, dim=1)
 
         # planning
-        reparam_robot_state = torch.cat([robot_state[:,-2:] - robot_state[:,:2], robot_state[:,2:4]], axis=1)
+        reparam_robot_state = torch.cat([robot_state[:, -2:] - robot_state[:, :2], robot_state[:, 2:4]], axis=1)
         feat_task = self.task_encoder(reparam_robot_state)
 
         feat_joint = self.joint_encoder(torch.cat([feat_task, feat_crowd], axis=1))
@@ -108,7 +102,7 @@ class ExtendedNetwork(nn.Module):
 class SAIL(MultiHumanPolicy):
     def __init__(self):
         super().__init__()
-        self.name ='SAIL'
+        self.name = 'SAIL'
 
     def configure(self, config):
         self.set_common_parameters(config)
@@ -139,9 +133,9 @@ class SAIL(MultiHumanPolicy):
         num_human = len(state.human_states)
         human_state = torch.empty([num_human, 4])
         for k in range(num_human):
-            human_state[k,0] = state.human_states[k].px
-            human_state[k,1] = state.human_states[k].py
-            human_state[k,2] = state.human_states[k].vx
-            human_state[k,3] = state.human_states[k].vy
+            human_state[k, 0] = state.human_states[k].px
+            human_state[k, 1] = state.human_states[k].py
+            human_state[k, 2] = state.human_states[k].vx
+            human_state[k, 3] = state.human_states[k].vy
 
         return [robot_state, human_state]
