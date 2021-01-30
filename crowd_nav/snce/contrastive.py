@@ -65,8 +65,7 @@ class SocialNCE():
             sim_pos = (query[:, None, :] * key_pos).sum(dim=2)
             sim_neg = (query[:, None, None, :] * key_neg).sum(dim=3)
             # logits
-            logits = torch.cat([sim_pos.view(-1).unsqueeze(1), sim_neg.view(sim_neg.size(
-                0), -1).repeat_interleave(self.horizon, dim=0)], dim=1) / self.temperature
+            logits = torch.cat([sim_pos.view(-1).unsqueeze(1), sim_neg.view(sim_neg.size(0), -1).repeat_interleave(self.horizon, dim=0)], dim=1) / self.temperature
         else:
             # sample embedding
             emb_pos = self.encoder_sample(sample_pos[mask_valid])
@@ -91,8 +90,7 @@ class SocialNCE():
                 logits = torch.cat([sim_pos.unsqueeze(1), sim_neg], dim=1) / self.temperature
 
         # loss
-        labels = torch.zeros(logits.size(
-            0), dtype=torch.long, device=self.device)
+        labels = torch.zeros(logits.size(0), dtype=torch.long, device=self.device)
         loss = self.criterion(logits, labels)
 
         return loss
@@ -104,7 +102,6 @@ class SocialNCE():
         for i in range(5):
             if len(pos.shape) > 2:
                 for k in range(self.horizon):
-                    plot_samples(robot[i, :4], human[i], robot[i, 4:], pos[i, k],
-                                 neg[i, k], fname='samples_{:d}_time_{:d}.png'.format(i, k))
+                    plot_samples(robot[i, :4], human[i], robot[i, 4:], pos[i, k], neg[i, k], fname='samples_{:d}_time_{:d}.png'.format(i, k))
             else:
                 plot_samples(robot[i, :4], human[i], robot[i, 4:], pos[i], neg[i], fname='samples_{:d}.png'.format(i))
