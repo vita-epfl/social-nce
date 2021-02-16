@@ -139,14 +139,10 @@ def main():
 
     # data collection
     robot.policy.multiagent_training = True
-    human_obsv = explorer.run_k_episodes(il_episodes, 'train', update_memory=True, imitation_learning=True, noise_explore=noise_explore)
+    explorer.run_k_episodes(il_episodes, 'train', update_memory=True, imitation_learning=True, noise_explore=noise_explore)
 
     torch.save(memory.memory, demonstration_file)
     logging.info('Save memory to %s', demonstration_file)
     
-    obs_file = os.path.join(args.memory_dir, 'data_traj.pt')
-    torch.save(human_obsv, obs_file)
-    logging.info('Save #%d episodes of obsv to %s', len(human_obsv), obs_file)
-
 if __name__ == '__main__':
     main()
