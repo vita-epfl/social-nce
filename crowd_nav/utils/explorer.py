@@ -41,8 +41,6 @@ class Explorer(object):
         collision_cases = []
         timeout_cases = []
 
-        if imitation_learning: human_obsv = []
-        
         for i in range(k):
             ob = self.env.reset(phase)
             done = False
@@ -90,8 +88,6 @@ class Explorer(object):
                     too_close += 1
                     min_dist.append(info.min_dist)
 
-            if imitation_learning: human_obsv.append(torch.FloatTensor(scene))
-
             if isinstance(info, ReachGoal):
                 success += 1
                 success_times.append(self.env.global_time)
@@ -132,9 +128,6 @@ class Explorer(object):
         if print_failure:
             logging.info('Collision cases: ' + ' '.join([str(x) for x in collision_cases]))
             logging.info('Timeout cases: ' + ' '.join([str(x) for x in timeout_cases]))
-
-        if imitation_learning:
-            return human_obsv
 
     def update_memory(self, states, actions, rewards, imitation_learning=False):
         if self.memory is None or self.gamma is None:
