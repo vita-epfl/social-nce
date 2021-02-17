@@ -19,7 +19,7 @@ torch.manual_seed(2020)
 
 def main():
     parser = argparse.ArgumentParser('Parse configuration file')
-    parser.add_argument('--policy', type=str, default='sspn')
+    parser.add_argument('--policy', type=str, default='sail')
     parser.add_argument('--env_config', type=str, default='configs/env.config')
     parser.add_argument('--policy_config', type=str, default='configs/policy.config')
     parser.add_argument('--imitate_config', type=str, default='configs/demonstrate.config')
@@ -92,12 +92,12 @@ def main():
     imitate_config = configparser.RawConfigParser()
     imitate_config.read(args.imitate_config)
 
-    # configure demonstrateion and explorer
+    # configure demonstration and explorer
     memory = ReplayMemory(10000000)         # sufficiently large to store expert demonstration
 
     if not os.path.exists(args.memory_dir):
         os.makedirs(args.memory_dir)
-    if robot.visible:
+    if robot.visible: 
         demonstration_file = os.path.join(args.memory_dir, 'data_imit_visible.pt')
     else:
         demonstration_file = os.path.join(args.memory_dir, 'data_imit_invisible.pt')
@@ -143,6 +143,6 @@ def main():
 
     torch.save(memory.memory, demonstration_file)
     logging.info('Save memory to %s', demonstration_file)
-    
+
 if __name__ == '__main__':
     main()

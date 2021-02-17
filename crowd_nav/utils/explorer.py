@@ -7,9 +7,11 @@ from crowd_sim.envs.utils.info import *
 from crowd_sim.envs.utils.action import ActionXY, ActionRot
 from crowd_sim.envs.utils.state import JointState
 
+
 def obs_to_frame(ob):
     frame = [[human.px, human.py, human.vx, human.vy] for human in ob]
     return frame
+
 
 class Explorer(object):
     def __init__(self, env, robot, device, num_frames, memory=None, gamma=None, target_policy=None):
@@ -50,7 +52,7 @@ class Explorer(object):
             scene = []
 
             while not done:
-                
+
                 # infer action from policy
                 if 'RNN' in self.robot.policy.name:
                     action = self.robot.act(ob)
@@ -79,7 +81,8 @@ class Explorer(object):
                 # env step
                 if imitation_learning and noise_explore > 0.0:
                     noise_magnitude = noise_explore * 2.0
-                    action = ActionXY(action[0] + torch.rand(1).sub(0.5) * noise_magnitude, action[1] + torch.rand(1).sub(0.5) * noise_magnitude) if self.robot.policy.kinematics == 'holonomic' else ActionRot(action[0] + torch.rand(1).sub(0.5) * noise_magnitude, action[1] + torch.rand(1).sub(0.5) * noise_magnitude)
+                    action = ActionXY(action[0] + torch.rand(1).sub(0.5) * noise_magnitude, action[1] + torch.rand(1).sub(0.5) * noise_magnitude) if self.robot.policy.kinematics == 'holonomic' else ActionRot(
+                        action[0] + torch.rand(1).sub(0.5) * noise_magnitude, action[1] + torch.rand(1).sub(0.5) * noise_magnitude)
 
                 ob, reward, done, info = self.env.step(action)
                 rewards.append(reward)
@@ -103,7 +106,7 @@ class Explorer(object):
                 raise ValueError('Invalid end signal from environment')
 
             if update_memory:
-                self.update_memory(states, actions, rewards, imitation_learning)
+                self.update_memory(states, actions, rewards)
 
             # episode result
             cumulative_rewards.append(sum([pow(self.gamma, t * self.robot.time_step * self.robot.v_pref)
@@ -119,7 +122,7 @@ class Explorer(object):
 
         extra_info = '' if episode is None else 'in episode {} '.format(episode)
         logging.info('{:<5} {} success: {:.2f}, collision: {:.2f}, nav time: {:.2f}, reward: {:.4f} +- {:.4f}'.
-                 format(phase.upper(), extra_info, success_rate, collision_rate, avg_nav_time, statistics.mean(cumulative_rewards), (statistics.stdev(cumulative_rewards) if len(cumulative_rewards) > 1 else 0.0)))
+                     format(phase.upper(), extra_info, success_rate, collision_rate, avg_nav_time, statistics.mean(cumulative_rewards), (statistics.stdev(cumulative_rewards) if len(cumulative_rewards) > 1 else 0.0)))
 
         if phase in ['val', 'test']:
             total_time = sum(success_times + collision_times + timeout_times) * self.robot.time_step
@@ -129,14 +132,13 @@ class Explorer(object):
             logging.info('Collision cases: ' + ' '.join([str(x) for x in collision_cases]))
             logging.info('Timeout cases: ' + ' '.join([str(x) for x in timeout_cases]))
 
-    def update_memory(self, states, actions, rewards, imitation_learning=False):
+    def update_memory(self, states, actions, rewards):
         if self.memory is None or self.gamma is None:
             raise ValueError('Memory or gamma value is not set!')
 
         for i, state in enumerate(states):
 
-            cumulative_reward = sum([pow(self.gamma, max(t - i, 0) * self.robot.time_step * self.robot.v_pref) * reward
-                     * (1 if t >= i else 0) for t, reward in enumerate(rewards)]) 
+            cumulative_reward = sum([pow(self.gamma, max(t - i, 0) * self.robot.time_step * self.robot.v_pref) * reward * (1 if t >= i else 0) for t, reward in enumerate(rewards)])
             value = torch.tensor([cumulative_reward], dtype=torch.float32).to(self.device)
 
             action = torch.tensor([actions[i][0], actions[i][1]], dtype=torch.float32).to(self.device)
