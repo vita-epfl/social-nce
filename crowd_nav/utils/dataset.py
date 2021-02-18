@@ -2,7 +2,7 @@ import logging
 import torch
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
-from torch.utils.data.sampler import SubsetRandomSampler, SequentialSampler
+from torch.utils.data.sampler import SubsetRandomSampler
 
 from crowd_nav.utils.transform import MultiAgentTransform
 
@@ -10,8 +10,6 @@ from crowd_nav.utils.transform import MultiAgentTransform
 class ImitDataset(Dataset):
 
     def __init__(self, data, action_space, device, vmin=0.0, horizon=3):
-
-        len_data = len(data)
 
         robot_data = data[0]
         human_data = data[1]
@@ -22,8 +20,8 @@ class ImitDataset(Dataset):
         pos_seq = torch.zeros(robot_data.size(0), horizon, 2)
         neg_seq = torch.zeros(human_data.size(0), horizon, human_data.size(1), 2)
         # remove samples at the end of episodes
-        vx = robot_data[1:,2]
-        dx = robot_data[1:,0] - robot_data[:-1,0]
+        vx = robot_data[1:, 2]
+        dx = robot_data[1:, 0] - robot_data[:-1, 0]
         diff = dx - vx * 0.25
         idx_done = (diff.abs() > 1e-6).nonzero(as_tuple=False)
         for t in range(horizon):
@@ -34,7 +32,7 @@ class ImitDataset(Dataset):
                 pos_seq[idx_done-i, t] *= 0.0
                 neg_seq[idx_done-i, t] *= 0.0
 
-        # remove bad experience for imitation 
+        # remove bad experience for imitation
         mask = (value_data > vmin).squeeze()
 
         self.robot_state = robot_data[mask].to(device)
@@ -68,7 +66,7 @@ class TrajDataset(Dataset):
         for i, episode in enumerate(data):
 
             # remove starting and ending frame due to unpredictability
-            speed = episode[:,:,-2:].norm(dim=2)
+            speed = episode[:, :, -2:].norm(dim=2)
             valid = episode[(speed > 1e-4).all(axis=1)]
 
             length_valid = valid.shape[0]
@@ -96,46 +94,6 @@ class TrajDataset(Dataset):
         return self.obsv[idx], self.target[idx]
 
 
-class SpatialContrastDataset(Dataset):
-
-    def __init__(self, data, max_pred, device):
-
-        assert max_pred >= 1
-
-        num_human = data[0].shape[1]
-        state_dim = data[0].shape[2]
-
-        self.transform = MultiAgentTransform(num_human)
-
-        obsv = []
-        target = []
-
-        for episode in data:
-
-            # remove starting and ending frame due to unpredictability
-            speed = episode[:,:,-2:].norm(dim=2)
-            valid = episode[(speed > 1e-4).all(axis=1)]
-
-            length_valid = valid.shape[0]
-
-            human_state = self.transform.transform_frame(valid)[:length_valid-max_pred]
-
-            frames = torch.empty((length_valid-max_pred, num_human, max_pred, state_dim))
-            for t in range(max_pred): frames[:,:,t,:] = valid[t+1:length_valid-max_pred+t+1,:,]
-
-            obsv.append(human_state.view((length_valid-max_pred)*num_human, num_human*state_dim))
-            target.append(frames.view((length_valid-max_pred)*num_human, max_pred, state_dim))
-
-        self.obsv = torch.cat(obsv).to(device)
-        self.target = torch.cat(target).to(device)
-
-    def __len__(self):
-        return self.obsv.shape[0]
-
-    def __getitem__(self, idx):
-        return self.obsv[idx], self.target[idx]
-
-
 def split_dataset(dataset, batch_size, percent_label=1.0, validation_split=0.3, is_random=False):
 
     dataset_size = len(dataset)
@@ -154,9 +112,7 @@ def split_dataset(dataset, batch_size, percent_label=1.0, validation_split=0.3, 
     train_sampler = SubsetRandomSampler(train_indices)
     valid_sampler = SubsetRandomSampler(val_indices)
 
-    train_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, 
-                                               sampler=train_sampler)
-    valid_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size,
-                                                sampler=valid_sampler)
+    train_loader = DataLoader(dataset, batch_size=batch_size, sampler=train_sampler)
+    valid_loader = DataLoader(dataset, batch_size=batch_size, sampler=valid_sampler)
 
     return train_loader, valid_loader

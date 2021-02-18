@@ -15,6 +15,7 @@ from crowd_nav.snce.model import ProjHead, SpatialEncoder, EventEncoder
 
 torch.manual_seed(2020)
 
+
 def parse_arguments():
     parser = argparse.ArgumentParser('Parse configuration file')
     parser.add_argument('--policy', type=str, default='sail')
@@ -30,18 +31,16 @@ def parse_arguments():
     parser.add_argument('--ratio_boundary', type=float, default=0.5)
     parser.add_argument('--percent_label', type=float, default=0.5)
     parser.add_argument('--num_epoch', type=int, default=200)
-    parser.add_argument('--scheduler_patience', type=int, default=20)    
+    parser.add_argument('--scheduler_patience', type=int, default=20)
     parser.add_argument('--save_every', type=int, default=5)
-    parser.add_argument('--length_pred', type=int, default=1)
-    parser.add_argument('--skip_pred', type=int, default=1)
     parser.add_argument('--model_file', type=str, default="")
     parser.add_argument('--output_dir', type=str, default='data/output/imitate')
     parser.add_argument('--memory_dir', type=str, default='data/demonstration')
     parser.add_argument('--freeze', default=False, action='store_true')
-    parser.add_argument('--predict', default=False, action='store_true')
     parser.add_argument('--gpu', default=False, action='store_true')
     args = parser.parse_args()
     return args
+
 
 def build_policy(args):
     """
@@ -57,6 +56,7 @@ def build_policy(args):
     policy.configure(policy_config)
     return policy
 
+
 def set_loader(args, device):
     """
     Set Data Loader
@@ -71,6 +71,7 @@ def set_loader(args, device):
     train_loader, valid_loader = split_dataset(dataset_imit, args.batch_size, args.percent_label, validation_split)
     return train_loader, valid_loader
 
+
 def set_model(args, device):
     """
     Set policy network
@@ -80,6 +81,7 @@ def set_model(args, device):
     policy_net = policy.get_model().to(device)
 
     return policy_net
+
 
 def load_model(policy_net, args, device):
     """
@@ -96,6 +98,7 @@ def load_model(policy_net, args, device):
 
     if args.freeze:
         freeze_model(policy_net, ['human_encoder'])
+
 
 def train(policy_net, projection_head, encoder_sample, train_loader, criterion, nce, optimizer, args):
     """
@@ -130,6 +133,7 @@ def train(policy_net, projection_head, encoder_sample, train_loader, criterion, 
     num_batch = len(train_loader)
     return loss_sum_all / num_batch, loss_sum_task / num_batch, loss_sum_nce / num_batch
 
+
 def validate(policy_net, projection_head, encoder_sample, valid_loader, criterion, nce, args):
     """
     Evaluate policy net
@@ -155,13 +159,15 @@ def validate(policy_net, projection_head, encoder_sample, valid_loader, criterio
     num_batch = len(valid_loader)
     return loss_sum_all / num_batch, loss_sum_task / num_batch, loss_sum_nce / num_batch
 
+
 def main():
     args = parse_arguments()
     print(args)
 
     # config
     if args.contrast_weight > 0:
-        suffix = "-{}-data-{:.2f}-weight-{:.1f}-horizon-{:d}-temperature-{:.2f}-nboundary-{:d}".format(args.contrast_sampling, args.percent_label, args.contrast_weight, args.contrast_horizon, args.contrast_temperature, args.contrast_nboundary)
+        suffix = "-{}-data-{:.2f}-weight-{:.1f}-horizon-{:d}-temperature-{:.2f}-nboundary-{:d}".format(
+            args.contrast_sampling, args.percent_label, args.contrast_weight, args.contrast_horizon, args.contrast_temperature, args.contrast_nboundary)
         if args.contrast_nboundary > 0:
             suffix += "-ratio-{:.2f}".format(args.ratio_boundary)
         if args.contrast_sampling == 'local':
@@ -192,9 +198,11 @@ def main():
     # optimize
     param = list(policy_net.parameters()) + list(projection_head.parameters()) + list(encoder_sample.parameters())
     optimizer = optim.Adam(param, lr=args.lr)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=args.scheduler_patience, threshold=0.01, factor=0.5, cooldown=args.scheduler_patience, min_lr=1e-5, verbose=True)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=args.scheduler_patience, threshold=0.01,
+                                                     factor=0.5, cooldown=args.scheduler_patience, min_lr=1e-5, verbose=True)
     criterion = nn.MSELoss()
-    nce = SocialNCE(projection_head, encoder_sample, args.contrast_sampling, args.contrast_horizon, args.contrast_nboundary, args.contrast_temperature, args.contrast_range, args.ratio_boundary)
+    nce = SocialNCE(projection_head, encoder_sample, args.contrast_sampling, args.contrast_horizon,
+                    args.contrast_nboundary, args.contrast_temperature, args.contrast_range, args.ratio_boundary)
 
     # loop
     for epoch in range(args.num_epoch):
@@ -205,10 +213,12 @@ def main():
         scheduler.step(train_loss_all)      # (optional) learning rate decay once training stagnates
 
         if epoch % args.save_every == (args.save_every - 1):
-            logging.info("Epoch #%02d: loss = (%.4f, %.4f), task = (%.4f, %.4f), nce = (%.4f, %.4f)", epoch, train_loss_all, eval_loss_all, train_loss_task, eval_loss_task, train_loss_nce, eval_loss_nce)
+            logging.info("Epoch #%02d: loss = (%.4f, %.4f), task = (%.4f, %.4f), nce = (%.4f, %.4f)", epoch,
+                         train_loss_all, eval_loss_all, train_loss_task, eval_loss_task, train_loss_nce, eval_loss_nce)
             torch.save(policy_net.state_dict(), os.path.join(args.output_dir, 'policy_net_{:02d}.pth'.format(epoch)))
 
     torch.save(policy_net.state_dict(), os.path.join(args.output_dir, 'policy_net.pth'))
+
 
 if __name__ == '__main__':
     main()
