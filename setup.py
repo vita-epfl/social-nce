@@ -20,6 +20,7 @@ setup(
         'matplotlib',
         'numpy',
         'scipy',
+        'sklearn',
         'pandas',
         'seaborn',
         'torch',
