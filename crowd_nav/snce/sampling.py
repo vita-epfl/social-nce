@@ -76,9 +76,9 @@ class EventSampler():
 
         radius = torch.rand(pos_seed.size(0), self.num_boundary * 10, device=self.device) * self.max_range + self.min_seperation
         theta = torch.rand(pos_seed.size(0), self.num_boundary * 10, device=self.device) * 2 * math.pi
-        x = radius * torch.cos(theta) + radius * torch.sin(theta)
-        y = radius * torch.sin(theta) - radius * torch.cos(theta)
-        sample_neg = torch.cat([x.unsqueeze(2), y.unsqueeze(2)], axis=2) + pos_seed.unsqueeze(1)
+        x = radius * torch.cos(theta)
+        y = radius * torch.sin(theta)
+        sample_neg = torch.stack([x, y], axis=2) + pos_seed.unsqueeze(1)
         sample_neg += torch.rand(sample_neg.size(), device=self.device).sub(0.5) * self.noise_local - robot[:, None, :2]
 
         return sample_pos, sample_neg, mask_valid
