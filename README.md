@@ -4,7 +4,7 @@
   <img src="docs/illustration.png" width="300">
 </p>
 
-This is a PyTorch implementation for the paper 
+This is an official implementation for the paper 
 
 **[Social NCE: Contrastive Learning of Socially-aware Motion Representations](https://arxiv.org/abs/2012.11717)**
 <br>by
@@ -14,13 +14,13 @@ This is a PyTorch implementation for the paper
 <a href="https://www.epfl.ch/labs/vita/">EPFL</a>
 <br>
 
-Please check out the following repositories for experiments on different models:  
-**[Social NCE + CrowdNav](https://github.com/vita-epfl/social-nce-crowdnav)  |  [Social NCE + Trajectron++](https://github.com/YuejiangLIU/social-nce-trajectron-plus-plus)  |  [Social NCE + STGCNN](https://github.com/qiyan98/social-nce-stgcnn)**
-
-**TL;DR: Contrastive Representation Learning + Negative Data Augmentations &#129138; Robust Neural Motion Models**
-> * Rank in 1st place on the [Trajnet++ forecasting challenge](https://www.aicrowd.com/challenges/trajnet-a-trajectory-forecasting-challenge/leaderboards) since November 2020
-> * Significantly reduce the collision rate of SOTA [human trajectroy predictors](https://github.com/StanfordASL/Trajectron-plus-plus)
+TL;DR: Contrastive Representation Learning + Negative Data Augmentations &#129138; Robust Neural Motion Models
+> * Rank in 1st place on the [Trajnet++ challenge](https://www.aicrowd.com/challenges/trajnet-a-trajectory-forecasting-challenge/leaderboards) since November 2020 to present
+> * Significantly reduce the collision rate of SOTA [human trajectroy forecasting models](https://github.com/StanfordASL/Trajectron-plus-plus)
 > * SOTA on imitation / reinforcement learning for [autonomous navigation in crowds](https://github.com/vita-epfl/CrowdNav)
+
+Please check out our code for experiments on different models as follows:  
+**[Social NCE + CrowdNav](https://github.com/vita-epfl/social-nce-crowdnav)  |  [Social NCE + Trajectron](https://github.com/YuejiangLIU/social-nce-trajectron-plus-plus)  |  [Social NCE + STGCNN](https://github.com/qiyan98/social-nce-stgcnn)**
 
 ### Preparation
 
@@ -78,7 +78,7 @@ Averaged results from the 150th to 200th epochs.
 
 ### Citation
 
-If you find the code useful for your research, please cite our following papers:
+If you find this code useful for your research, please cite our papers:
 
 ```bibtex
 @article{liu2020snce,
