@@ -4,19 +4,22 @@
   <img src="docs/illustration.png" width="300">
 </p>
 
-This is a PyTorch implementation of the [Social-NCE paper](https://arxiv.org/abs/2012.11717). 
+This is a PyTorch implementation for the paper 
 
-```bibtex
-@article{liu2020snce,
-  title   = {Social NCE: Contrastive Learning of Socially-aware Motion Representations},
-  author  = {Yuejiang Liu and Qi Yan and Alexandre Alahi},
-  journal = {arXiv preprint arXiv:2012.11717},
-  year    = {2020}
-}
-```
+**[Social NCE: Contrastive Learning of Socially-aware Motion Representations](https://arxiv.org/abs/2012.11717)**
+<br>by
+<a href="https://sites.google.com/view/yuejiangliu/">Yuejiang Liu</a>,
+<a href="https://qiyan98.github.io/">Qi Yan</a>,
+<a href="https://people.epfl.ch/alexandre.alahi/?lang=en/">Alexandre Alahi</a> at
+<a href="https://www.epfl.ch/labs/vita/">EPFL</a>
+<br>
 
-> Social Contrastive Learning + Knowledge-driven Negative Sampling &#129138; Robust Neural Motion Models
-> * Rank the **1st place** on the [Trajnet++ forecasting challenge](https://www.aicrowd.com/challenges/trajnet-a-trajectory-forecasting-challenge/leaderboards) at the time of publication
+Please check out the following repositories for experiments on different models:  
+**[Social NCE + CrowdNav](https://github.com/vita-epfl/social-nce-crowdnav)  |  [Social NCE + Trajectron++](https://github.com/YuejiangLIU/social-nce-trajectron-plus-plus)  |  [Social NCE + STGCNN](https://github.com/qiyan98/social-nce-stgcnn)**
+
+**TL;DR: Contrastive Representation Learning + Negative Data Augmentations &#129138; Robust Neural Motion Models**
+> * Rank in 1st place on the [Trajnet++ forecasting challenge](https://www.aicrowd.com/challenges/trajnet-a-trajectory-forecasting-challenge/leaderboards) since November 2020
+> * Significantly reduce the collision rate of SOTA [human trajectroy predictors](https://github.com/StanfordASL/Trajectron-plus-plus)
 > * SOTA on imitation / reinforcement learning for [autonomous navigation in crowds](https://github.com/vita-epfl/CrowdNav)
 
 ### Preparation
@@ -73,6 +76,21 @@ Averaged results from the 150th to 200th epochs.
 </tr>
 </tbody></table>
 
-### Acknowledgments
+### Citation
 
-Our code is developed based on [CrowdNav](https://github.com/vita-epfl/CrowdNav). 
+If you find the code useful for your research, please cite our following papers:
+
+```bibtex
+@article{liu2020snce,
+  title   = {Social NCE: Contrastive Learning of Socially-aware Motion Representations},
+  author  = {Yuejiang Liu and Qi Yan and Alexandre Alahi},
+  journal = {arXiv preprint arXiv:2012.11717},
+  year    = {2020}
+}
+@inproceedings{chen2019crowdnav,
+    title={Crowd-Robot Interaction: Crowd-aware Robot Navigation with Attention-based Deep Reinforcement Learning},
+    author={Changan Chen and Yuejiang Liu and Sven Kreiss and Alexandre Alahi},
+    year={2019},
+    booktitle={ICRA}
+}
+```
