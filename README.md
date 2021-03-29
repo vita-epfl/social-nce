@@ -1,4 +1,4 @@
-## Social NCE: Contrastive Learning of Socially-aware Motion Representations
+## CrowdNav with Social-NCE
 
 <p align="center">
   <img src="docs/illustration.png" width="300">
