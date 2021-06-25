@@ -20,7 +20,7 @@
 	(Optional) Generate data
 	```
 	cd crowd_nav && mkdir data/expert/ -p && cd data/expert
-	gdown https://drive.google.com/uc?id=1awXDsRQcmgacj7nUhPzwb5UMNZCJCjvu
+	gdown https://drive.google.com/uc?id=1awXDsRQcmgacj7nUhPzwb5UMNZCJCjvu && cd ../..
 	python utils/demonstrate.py --policy="sail" --output_dir="data/output/demonstration" --memory_dir="data/demonstration" --expert_file="data/expert/rl_model.pth"
 	python utils/convert.py
 	```

@@ -9,7 +9,6 @@ import gym
 import git
 from crowd_sim.envs.utils.robot import Robot
 from crowd_nav.utils.frames import FrameStack
-from crowd_nav.utils.trainer import Imitator
 from crowd_nav.utils.memory import ReplayMemory
 from crowd_nav.utils.explorer import Explorer
 from crowd_nav.utils.pretrain import freeze_model
