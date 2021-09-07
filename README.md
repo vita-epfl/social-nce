@@ -1,27 +1,26 @@
 ## CrowdNav with Social-NCE
 
+<br>
+
 <p align="center">
   <img src="docs/illustration.png" width="300">
 </p>
 
-This is an official implementation for the paper
-
-**[Social NCE: Contrastive Learning of Socially-aware Motion Representations](https://arxiv.org/abs/2012.11717)**
-<br>by
-<a href="https://sites.google.com/view/yuejiangliu/">Yuejiang Liu</a>,
-<a href="https://qiyan98.github.io/">Qi Yan</a>,
-<a href="https://people.epfl.ch/alexandre.alahi/?lang=en/">Alexandre Alahi</a> at
-<a href="https://www.epfl.ch/labs/vita/">EPFL</a>
+This is an official implementation for\
+&nbsp;&nbsp;&nbsp;&nbsp;Social NCE: Contrastive Learning of Socially-aware Motion Representations
 <br>
-to appear at ICCV 2021
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://sites.google.com/view/yuejiangliu/">Yuejiang Liu</a>,
+<a href="https://qiyan98.github.io/">Qi Yan</a>,
+<a href="https://people.epfl.ch/alexandre.alahi/?lang=en/">Alexandre Alahi</a> at EPFL
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;International Conference on Computer Vision (ICCV) 2021
 
-TL;DR: Contrastive Representation Learning + Negative Data Augmentations &#129138; Robust Neural Motion Models
+**[`Paper`](https://arxiv.org/abs/2012.11717) | [`Video`](https://youtu.be/K-2xlAmFO9o) | [`Website`](https://www.epfl.ch/labs/vita/research/planning/social-nce/) | [`Social NCE + CrowdNav`](https://github.com/vita-epfl/social-nce-crowdnav) | [`Social NCE + STGCNN`](https://github.com/qiyan98/social-nce-stgcnn)**
+
+> TL;DR: Contrastive Representation Learning + Negative Data Augmentations &#129138; Robust Neural Motion Models
 > * Rank in 1st place on the [Trajnet++ challenge](https://www.aicrowd.com/challenges/trajnet-a-trajectory-forecasting-challenge/leaderboards) since November 2020 to present
 > * Significantly reduce the collision rate of SOTA [human trajectroy forecasting models](https://github.com/StanfordASL/Trajectron-plus-plus)
 > * SOTA on imitation / reinforcement learning for [autonomous navigation in crowds](https://github.com/vita-epfl/CrowdNav)
-
-Please check out our code for experiments on different models as follows:  
-**[Social NCE + CrowdNav](https://github.com/vita-epfl/social-nce-crowdnav)  |  [Social NCE + Trajectron](https://github.com/YuejiangLIU/social-nce-trajectron-plus-plus)  |  [Social NCE + STGCNN](https://github.com/qiyan98/social-nce-stgcnn)**
 
 ### Preparation
 
