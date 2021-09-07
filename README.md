@@ -15,7 +15,7 @@ This is an official implementation for\
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;International Conference on Computer Vision (ICCV) 2021
 
-**[`Paper`](https://arxiv.org/abs/2012.11717) | [`Video`](https://youtu.be/K-2xlAmFO9o) | [`Website`](https://www.epfl.ch/labs/vita/research/planning/social-nce/) | [`Social NCE + CrowdNav`](https://github.com/vita-epfl/social-nce-crowdnav) | [`Social NCE + STGCNN`](https://github.com/qiyan98/social-nce-stgcnn)**
+**[`Paper`](https://arxiv.org/abs/2012.11717) | [`Video`](https://youtu.be/K-2xlAmFO9o) | [`Website`](https://www.epfl.ch/labs/vita/research/planning/social-nce/) | [`Social NCE + Trajectron`](https://github.com/YuejiangLIU/social-nce-trajectron-plus-plus) | [`Social NCE + STGCNN`](https://github.com/qiyan98/social-nce-stgcnn)**
 
 > TL;DR: Contrastive Representation Learning + Negative Data Augmentations &#129138; Robust Neural Motion Models
 > * Rank in 1st place on the [Trajnet++ challenge](https://www.aicrowd.com/challenges/trajnet-a-trajectory-forecasting-challenge/leaderboards) since November 2020 to present
