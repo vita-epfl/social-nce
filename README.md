@@ -1,4 +1,4 @@
-## CrowdNav with Social-NCE
+## Social-NCE + CrowdNav
 
 **[`Website`](https://socialnce.github.io) | [`Paper`](https://arxiv.org/abs/2012.11717) | [`Video`](https://youtu.be/s1khZWWiQfA) | [`Social NCE + Trajectron`](https://github.com/YuejiangLIU/social-nce-trajectron-plus-plus) | [`Social NCE + STGCNN`](https://github.com/qiyan98/social-nce-stgcnn)**
 
