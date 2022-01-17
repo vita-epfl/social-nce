@@ -14,11 +14,13 @@ This is an official implementation for\
 <a href="https://people.epfl.ch/alexandre.alahi/?lang=en/">Alexandre Alahi</a>, ICCV 2021
 <br>
 
-
 > TL;DR: Contrastive Representation Learning + Negative Data Augmentations &#129138; Robust Neural Motion Models
 > * Rank in 1st place on the [Trajnet++ challenge](https://www.aicrowd.com/challenges/trajnet-a-trajectory-forecasting-challenge/leaderboards) since November 2020 to present
 > * Significantly reduce the collision rate of SOTA [human trajectroy forecasting models](https://github.com/StanfordASL/Trajectron-plus-plus)
 > * SOTA on imitation / reinforcement learning for [autonomous navigation in crowds](https://github.com/vita-epfl/CrowdNav)
+
+Please find our more recent work on this topic in the following paper:\
+[Towards Robust and Adaptive Motion Forecasting: A Causal Representation Perspective](https://github.com/vita-epfl/causalmotion), Preprint 2021
 
 ### Preparation
 
