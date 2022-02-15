@@ -81,16 +81,18 @@ Averaged results from the 150th to 200th epochs.
 If you find this code useful for your research, please cite our papers:
 
 ```bibtex
-@article{liu2020snce,
-  title   = {Social NCE: Contrastive Learning of Socially-aware Motion Representations},
-  author  = {Yuejiang Liu and Qi Yan and Alexandre Alahi},
-  journal = {arXiv preprint arXiv:2012.11717},
-  year    = {2020}
+@inproceedings{liu2021social,
+  title={Social nce: Contrastive learning of socially-aware motion representations},
+  author={Liu, Yuejiang and Yan, Qi and Alahi, Alexandre},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+  pages={15118--15129},
+  year={2021}
 }
-@inproceedings{chen2019crowdnav,
-    title={Crowd-Robot Interaction: Crowd-aware Robot Navigation with Attention-based Deep Reinforcement Learning},
-    author={Changan Chen and Yuejiang Liu and Sven Kreiss and Alexandre Alahi},
-    year={2019},
-    booktitle={ICRA}
+@inproceedings{chen2019crowd,
+  title={Crowd-robot interaction: Crowd-aware robot navigation with attention-based deep reinforcement learning},
+  author={Chen, Changan and Liu, Yuejiang and Kreiss, Sven and Alahi, Alexandre},
+  booktitle={International Conference on Robotics and Automation (ICRA)},
+  pages={6015--6022},
+  year={2019}
 }
 ```
