@@ -19,8 +19,8 @@ This is an official implementation for\
 > * Significantly reduce the collision rate of SOTA [human trajectroy forecasting models](https://github.com/StanfordASL/Trajectron-plus-plus)
 > * SOTA on imitation / reinforcement learning for [autonomous navigation in crowds](https://github.com/vita-epfl/CrowdNav)
 
-Please find our more recent work on this topic in the following paper:\
-[Towards Robust and Adaptive Motion Forecasting: A Causal Representation Perspective](https://github.com/vita-epfl/causalmotion), Preprint 2021
+[**New**] our more recent work on this topic:\
+[Towards Robust and Adaptive Motion Forecasting: A Causal Representation Perspective](https://github.com/vita-epfl/causalmotion), CVPR 2022.
 
 ### Preparation
 
