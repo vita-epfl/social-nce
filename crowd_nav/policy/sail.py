@@ -6,6 +6,7 @@ from crowd_nav.policy.multi_human_rl import MultiHumanPolicy
 from crowd_nav.utils.transform import MultiAgentTransform
 
 class ExtendedNetwork(nn.Module):
+    """ Policy network for imitation learning """
     def __init__(self, num_human, embedding_dim=64, hidden_dim=64, local_dim=32):
         super().__init__()
         self.num_human = num_human
@@ -125,7 +126,7 @@ class SAIL(MultiHumanPolicy):
         return ActionXY(action[0].item(), action[1].item()) if self.kinematics == 'holonomic' else ActionRot(action[0].item(), action[1].item())
 
     def transform(self, state):
-        """ Transform state object to tensor input of RNN policy
+        """ Transform state object to tensor input
         """
 
         robot_state = torch.Tensor([state.self_state.px, state.self_state.py, state.self_state.vx, state.self_state.vy, state.self_state.gx, state.self_state.gy])
